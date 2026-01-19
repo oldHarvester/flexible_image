@@ -31,6 +31,25 @@ class FlexibleImage extends StatelessWidget {
     required this.source,
   });
 
+  FlexibleImage.defineSource({
+    super.key,
+    required String? source,
+    this.alignment,
+    this.bitmapSettings,
+    this.blendMode,
+    this.color,
+    this.errorBuilder,
+    this.excludeFromSemantics = false,
+    this.fit,
+    this.height,
+    this.matchTextDirection,
+    this.placeholderBuilder,
+    this.semanticsLabel,
+    this.unsupportedBuilder,
+    this.vectorSettings,
+    this.width,
+  }) : source = FlexibleImageSource.fromNullableSource(source);
+
   final FlexibleImageSource source;
   final FlexibleVectorImageSettings? vectorSettings;
   final FlexibleBitmapImageSettings? bitmapSettings;

@@ -98,6 +98,16 @@ sealed class FlexibleImageSource with EquatableMixin {
     };
   }
 
+  factory FlexibleImageSource.fromNullableSource(String? source) {
+    if (source == null) {
+      return FlexibleUnsupportedImageSource(
+        fileFormat: FileFormat.emptyUnknown(),
+        source: source,
+      );
+    }
+    return FlexibleImageSource.fromSource(source);
+  }
+
   factory FlexibleImageSource.fromSource(String source) {
     final base64Bytes = source.tryBase64Decode;
 
@@ -149,7 +159,7 @@ class FlexibleUnsupportedImageSource extends FlexibleImageSource {
     required FileFormat fileFormat,
   }) : _fileFormat = fileFormat;
 
-  final String source;
+  final String? source;
   final FileFormat _fileFormat;
 
   @override
