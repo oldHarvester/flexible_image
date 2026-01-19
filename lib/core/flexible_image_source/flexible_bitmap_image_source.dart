@@ -17,15 +17,34 @@ class FlexibleBitmapNetworkImageSource extends FlexibleNetworkImageSource {
   const FlexibleBitmapNetworkImageSource({
     required super.url,
     super.headers,
+    this.cacheKey,
     this.scale = 1.0,
-    this.webHtmlElementStrategy = WebHtmlElementStrategy.never,
+    this.cacheManager,
+    this.errorListener,
+    this.imageRenderMethodForWeb = ImageRenderMethodForWeb.HtmlImage,
+    this.maxHeight,
+    this.maxWidth,
   });
 
   final double scale;
-  final WebHtmlElementStrategy webHtmlElementStrategy;
+  final String? cacheKey;
+  final BaseCacheManager? cacheManager;
+  final void Function(Object error)? errorListener;
+  final ImageRenderMethodForWeb imageRenderMethodForWeb;
+  final int? maxWidth;
+  final int? maxHeight;
 
   @override
-  List<Object?> get props => [...super.props, scale, webHtmlElementStrategy];
+  List<Object?> get props => [
+        ...super.props,
+        scale,
+        cacheKey,
+        cacheManager,
+        errorListener,
+        imageRenderMethodForWeb,
+        maxWidth,
+        maxHeight,
+      ];
 }
 
 class FlexibleBitmapMemoryImageSource extends FlexibleMemoryImageSource {

@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 
 part 'flexible_vector_image_source.dart';
 part 'flexible_bitmap_image_source.dart';
@@ -81,11 +84,16 @@ sealed class FlexibleImageSource with EquatableMixin {
           bundle: source.bundle,
           package: source.packageName,
         ) as ImageProvider,
-      FlexibleBitmapNetworkImageSource _ => NetworkImage(
+      FlexibleBitmapNetworkImageSource _ => CachedNetworkImageProvider(
           source.url,
           headers: source.headers,
           scale: source.scale,
-          webHtmlElementStrategy: source.webHtmlElementStrategy,
+          cacheKey: source.cacheKey,
+          cacheManager: source.cacheManager,
+          errorListener: source.errorListener,
+          imageRenderMethodForWeb: source.imageRenderMethodForWeb,
+          maxHeight: source.maxHeight,
+          maxWidth: source.maxWidth,
         ),
       FlexibleBitmapMemoryImageSource _ => MemoryImage(
           source.bytes,
