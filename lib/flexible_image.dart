@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:vector_graphics/vector_graphics_compat.dart';
-export 'package:vector_graphics/vector_graphics.dart';
 
 import 'core/flexible_image_source/flexible_image_source.dart';
+
+export 'package:vector_graphics/vector_graphics.dart';
+export 'core/flexible_image_source/flexible_image_source.dart';
 
 part 'core/flexible_image_theme.dart';
 part 'core/flexible_vector_image_settings.dart';
