@@ -1,6 +1,5 @@
 // ignore_for_file: implementation_imports, depend_on_referenced_packages
 
-import 'package:flutter_svg/src/utilities/_file_io.dart';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
+import 'package:flutter_svg/src/utilities/file.dart';
 
 part 'flexible_vector_image_source.dart';
 part 'flexible_bitmap_image_source.dart';
