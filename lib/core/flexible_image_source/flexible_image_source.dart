@@ -1,4 +1,6 @@
-import 'package:universal_io/io.dart';
+// ignore_for_file: implementation_imports, depend_on_referenced_packages
+
+import 'package:flutter_svg/src/utilities/_file_io.dart';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
