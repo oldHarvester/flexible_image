@@ -5,13 +5,15 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart'
+    show AssetBundle, AssetImage, ImageProvider, MemoryImage;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter_svg/src/utilities/file.dart';
+import 'package:flexible_image/core/flexible_image_source/file_image/file_image.dart';
 
 part 'flexible_vector_image_source.dart';
 part 'flexible_bitmap_image_source.dart';
