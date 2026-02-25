@@ -10,6 +10,7 @@ typedef FlexibleImagePlaceholderBuilder = Widget Function(
   BuildContext context,
   Widget? child,
   ImageChunkEvent? loadingProgress,
+  bool isLoading,
 );
 
 typedef FlexibleBitmapImageFrameBuilder = Widget Function(
@@ -98,7 +99,7 @@ class FlexibleImageThemeData with EquatableMixin {
         textAlign: TextAlign.center,
       );
     },
-    placeholderBuilder: (context, child, loadingProgress) {
+    placeholderBuilder: (context, child, loadingProgress, isLoading) {
       return child ?? SizedBox.shrink();
     },
     unsupportedBuilder: (context, unsupportedSource) {

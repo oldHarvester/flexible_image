@@ -122,7 +122,19 @@ class FlexibleImage extends StatelessWidget {
               isAntiAlias: bitmapSettings.isAntiAlias,
               opacity: bitmapSettings.opacity,
               repeat: bitmapSettings.repeat,
-              loadingBuilder: placeholderBuilder,
+              loadingBuilder: (context, child, loadingProgress) {
+                final expectedBytes = loadingProgress?.expectedTotalBytes;
+                final loadedBytes = loadingProgress?.cumulativeBytesLoaded;
+                final bytesLoading = expectedBytes != null &&
+                    loadedBytes != null &&
+                    loadedBytes < expectedBytes;
+                return placeholderBuilder.call(
+                  context,
+                  child,
+                  loadingProgress,
+                  bytesLoading,
+                );
+              },
               errorBuilder: errorBuilder,
               frameBuilder: frameBuilder,
               semanticLabel: semanticsLabel,
@@ -152,7 +164,7 @@ class FlexibleImage extends StatelessWidget {
               colorFilter: colorFilter,
               errorBuilder: errorBuilder,
               placeholderBuilder: (context) =>
-                  placeholderBuilder(context, null, null),
+                  placeholderBuilder(context, null, null, true),
             );
           } else if (source is FlexibleUnsupportedImageSource) {
             return unsupportedBuilder(context, source);
