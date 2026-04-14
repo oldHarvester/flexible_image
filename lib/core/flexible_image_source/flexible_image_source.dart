@@ -40,7 +40,7 @@ sealed class FlexibleImageSource with EquatableMixin {
     };
   }
 
-  SvgLoader? get vectorProvider {
+  SvgLoader? buildVectorProvider() {
     final source = this;
     return switch (source) {
       FlexibleUnsupportedImageSource _ => null,
@@ -75,7 +75,7 @@ sealed class FlexibleImageSource with EquatableMixin {
     };
   }
 
-  ImageProvider<Object>? buildProvider() {
+  ImageProvider<Object>? buildBitmapProvider() {
     final source = this;
     return switch (source) {
       FlexibleUnsupportedImageSource _ => null,

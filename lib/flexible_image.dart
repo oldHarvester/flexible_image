@@ -74,6 +74,7 @@ class FlexibleImage extends StatefulWidget {
 
 class _FlexibleImageState extends State<FlexibleImage> {
   late ImageProvider<Object>? _imageProvider;
+  late SvgLoader? _vectorProvider;
 
   @override
   void initState() {
@@ -82,21 +83,27 @@ class _FlexibleImageState extends State<FlexibleImage> {
   }
 
   void _setProvider() {
-    _imageProvider = widget.source.buildProvider();
+    _imageProvider =
+        widget.source.isBitmap ? widget.source.buildBitmapProvider() : null;
+    _vectorProvider =
+        widget.source.isVector ? widget.source.buildVectorProvider() : null;
   }
 
   @override
   void didUpdateWidget(covariant FlexibleImage oldWidget) {
-    switch (widget.source) {
-      case FlexibleBitmapMemoryImageSource _:
-      case FlexibleVectorMemoryImageSource _:
-        if (widget.source != oldWidget.source) {
+    if (widget.source.isBitmap != widget.source.isBitmap) {
+      _setProvider();
+    } else {
+      switch (widget.source) {
+        case FlexibleMemoryImageSource _:
+          if (widget.source != oldWidget.source) {
+            _setProvider();
+          }
+          break;
+        default:
           _setProvider();
-        }
-        break;
-      default:
-        _setProvider();
-        break;
+          break;
+      }
     }
 
     super.didUpdateWidget(oldWidget);
@@ -126,7 +133,7 @@ class _FlexibleImageState extends State<FlexibleImage> {
     final source = widget.source;
     final color = widget.color;
     final bitmapProvider = _imageProvider;
-    final vectorProvider = source.vectorProvider;
+    final vectorProvider = _vectorProvider;
     final placeholderBuilder = theme.placeholderBuilder;
     final errorBuilder = theme.errorBuilder;
     final unsupportedBuilder = theme.unsupportedBuilder;
