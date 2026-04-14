@@ -13,7 +13,7 @@ part 'core/flexible_image_theme.dart';
 part 'core/flexible_vector_image_settings.dart';
 part 'core/flexible_bitmap_image_settings.dart';
 
-class FlexibleImage extends StatelessWidget {
+class FlexibleImage extends StatefulWidget {
   const FlexibleImage({
     super.key,
     this.alignment,
@@ -68,30 +68,64 @@ class FlexibleImage extends StatelessWidget {
   final bool? matchTextDirection;
   final bool excludeFromSemantics;
 
+  @override
+  State<FlexibleImage> createState() => _FlexibleImageState();
+}
+
+class _FlexibleImageState extends State<FlexibleImage> {
+  late ImageProvider<Object>? _imageProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _setProvider();
+  }
+
+  void _setProvider() {
+    _imageProvider = widget.source.buildProvider();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlexibleImage oldWidget) {
+    switch (widget.source) {
+      case FlexibleBitmapMemoryImageSource _:
+      case FlexibleVectorMemoryImageSource _:
+        if (widget.source != oldWidget.source) {
+          _setProvider();
+        }
+        break;
+      default:
+        _setProvider();
+        break;
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
   FlexibleImageThemeData _mergeTheme(BuildContext context) {
     final theme = FlexibleImageTheme.of(context);
     return theme.copyWith(
-      alignment: alignment ?? theme.alignment,
-      bitmapSettings: bitmapSettings ?? theme.bitmapSettings,
-      vectorSettings: vectorSettings ?? theme.vectorSettings,
-      blendMode: blendMode ?? theme.blendMode,
-      color: color ?? theme.color,
-      errorBuilder: errorBuilder ?? theme.errorBuilder,
-      fit: fit ?? theme.fit,
-      height: height ?? theme.height,
-      matchTextDirection: matchTextDirection ?? theme.matchTextDirection,
-      placeholderBuilder: placeholderBuilder ?? theme.placeholderBuilder,
-      unsupportedBuilder: unsupportedBuilder ?? theme.unsupportedBuilder,
-      width: width ?? theme.width,
+      alignment: widget.alignment ?? theme.alignment,
+      bitmapSettings: widget.bitmapSettings ?? theme.bitmapSettings,
+      vectorSettings: widget.vectorSettings ?? theme.vectorSettings,
+      blendMode: widget.blendMode ?? theme.blendMode,
+      color: widget.color ?? theme.color,
+      errorBuilder: widget.errorBuilder ?? theme.errorBuilder,
+      fit: widget.fit ?? theme.fit,
+      height: widget.height ?? theme.height,
+      matchTextDirection: widget.matchTextDirection ?? theme.matchTextDirection,
+      placeholderBuilder: widget.placeholderBuilder ?? theme.placeholderBuilder,
+      unsupportedBuilder: widget.unsupportedBuilder ?? theme.unsupportedBuilder,
+      width: widget.width ?? theme.width,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = _mergeTheme(context);
-    final source = this.source;
-    final color = this.color;
-    final bitmapProvider = source.bitmapProvider;
+    final source = widget.source;
+    final color = widget.color;
+    final bitmapProvider = _imageProvider;
     final vectorProvider = source.vectorProvider;
     final placeholderBuilder = theme.placeholderBuilder;
     final errorBuilder = theme.errorBuilder;
@@ -137,10 +171,10 @@ class FlexibleImage extends StatelessWidget {
               },
               errorBuilder: errorBuilder,
               frameBuilder: frameBuilder,
-              semanticLabel: semanticsLabel,
-              width: width,
-              height: height,
-              excludeFromSemantics: excludeFromSemantics,
+              semanticLabel: widget.semanticsLabel,
+              width: widget.width,
+              height: widget.height,
+              excludeFromSemantics: widget.excludeFromSemantics,
               color: color,
               fit: fit,
               colorBlendMode: blendMode,
@@ -154,11 +188,11 @@ class FlexibleImage extends StatelessWidget {
               allowDrawingOutsideViewBox:
                   vectorSettings.allowDrawingOutsideViewBox,
               clipBehavior: vectorSettings.clipBehavior,
-              excludeFromSemantics: excludeFromSemantics,
+              excludeFromSemantics: widget.excludeFromSemantics,
               matchTextDirection: matchTextDirection,
-              semanticsLabel: semanticsLabel,
-              width: width,
-              height: height,
+              semanticsLabel: widget.semanticsLabel,
+              width: widget.width,
+              height: widget.height,
               alignment: alignment,
               fit: fit,
               colorFilter: colorFilter,

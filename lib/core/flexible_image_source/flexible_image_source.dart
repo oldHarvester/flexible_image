@@ -75,7 +75,7 @@ sealed class FlexibleImageSource with EquatableMixin {
     };
   }
 
-  ImageProvider<Object>? get bitmapProvider {
+  ImageProvider<Object>? buildProvider() {
     final source = this;
     return switch (source) {
       FlexibleUnsupportedImageSource _ => null,
@@ -190,7 +190,7 @@ sealed class FlexibleAssetImageSource extends FlexibleImageSource {
   final String? packageName;
 
   @override
-  List<Object?> get props => [source, bundle, packageName];
+  List<Object?> get props => [source, packageName];
 }
 
 sealed class FlexibleNetworkImageSource extends FlexibleImageSource {
@@ -225,5 +225,5 @@ sealed class FlexibleFileImageSource extends FlexibleImageSource {
   final File file;
 
   @override
-  List<Object?> get props => [file];
+  List<Object?> get props => [file.path];
 }
