@@ -82,13 +82,6 @@ class _FlexibleImageState extends State<FlexibleImage> {
     _setProvider();
   }
 
-  void _setProvider() {
-    _imageProvider =
-        widget.source.isBitmap ? widget.source.buildBitmapProvider() : null;
-    _vectorProvider =
-        widget.source.isVector ? widget.source.buildVectorProvider() : null;
-  }
-
   @override
   void didUpdateWidget(covariant FlexibleImage oldWidget) {
     if (widget.source.isBitmap != widget.source.isBitmap) {
@@ -105,8 +98,14 @@ class _FlexibleImageState extends State<FlexibleImage> {
           break;
       }
     }
-
     super.didUpdateWidget(oldWidget);
+  }
+
+  void _setProvider() {
+    _imageProvider =
+        widget.source.isBitmap ? widget.source.buildBitmapProvider() : null;
+    _vectorProvider =
+        widget.source.isVector ? widget.source.buildVectorProvider() : null;
   }
 
   FlexibleImageThemeData _mergeTheme(BuildContext context) {
