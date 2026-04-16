@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +14,112 @@ export 'core/flexible_image_source/flexible_image_source.dart';
 part 'core/flexible_image_theme.dart';
 part 'core/flexible_vector_image_settings.dart';
 part 'core/flexible_bitmap_image_settings.dart';
+
+class FlexibleAsyncImage extends StatelessWidget {
+  const FlexibleAsyncImage({
+    super.key,
+    required this.source,
+    this.alignment,
+    this.bitmapSettings,
+    this.blendMode,
+    this.color,
+    this.errorBuilder,
+    this.excludeFromSemantics = false,
+    this.fit,
+    this.height,
+    this.matchTextDirection,
+    this.placeholderBuilder,
+    this.semanticsLabel,
+    this.unsupportedBuilder,
+    this.vectorSettings,
+    this.width,
+  });
+
+  FlexibleAsyncImage.fromBytes({
+    super.key,
+    required Future<Uint8List> bytes,
+    this.alignment,
+    this.bitmapSettings,
+    this.blendMode,
+    this.color,
+    this.errorBuilder,
+    this.excludeFromSemantics = false,
+    this.fit,
+    this.height,
+    this.matchTextDirection,
+    this.placeholderBuilder,
+    this.semanticsLabel,
+    this.unsupportedBuilder,
+    this.vectorSettings,
+    this.width,
+  }) : source = bytes.then(
+          (value) {
+            return FlexibleImageSource.fromBytes(value);
+          },
+        );
+
+  final Future<FlexibleImageSource> source;
+  final FlexibleVectorImageSettings? vectorSettings;
+  final FlexibleBitmapImageSettings? bitmapSettings;
+  final Alignment? alignment;
+  final double? width;
+  final double? height;
+  final Color? color;
+  final BlendMode? blendMode;
+  final BoxFit? fit;
+  final FlexibleImageErrorBuilder? errorBuilder;
+  final FlexibleImagePlaceholderBuilder? placeholderBuilder;
+  final FlexibleImageUnsupportedBuilder? unsupportedBuilder;
+  final String? semanticsLabel;
+  final bool? matchTextDirection;
+  final bool excludeFromSemantics;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = FlexibleImageTheme.of(context);
+    final errorBuilder = this.errorBuilder ?? theme.errorBuilder;
+    final placeholderBuilder =
+        this.placeholderBuilder ?? theme.placeholderBuilder;
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FutureBuilder(
+        future: source,
+        builder: (context, snapshot) {
+          final data = snapshot.data;
+          final error = snapshot.error;
+          final stackTrace = snapshot.stackTrace;
+          if (data == null && error == null && stackTrace == null) {
+            return placeholderBuilder(context, null, null, true);
+          } else if (data != null) {
+            return FlexibleImage(
+              source: data,
+              alignment: alignment,
+              bitmapSettings: bitmapSettings,
+              blendMode: blendMode,
+              color: color,
+              errorBuilder: errorBuilder,
+              placeholderBuilder: placeholderBuilder,
+              excludeFromSemantics: excludeFromSemantics,
+              fit: fit,
+              height: height,
+              width: width,
+              matchTextDirection: matchTextDirection,
+              semanticsLabel: semanticsLabel,
+              unsupportedBuilder: unsupportedBuilder,
+              vectorSettings: vectorSettings,
+            );
+          } else if (error != null) {
+            return errorBuilder(context, error, stackTrace);
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
+    );
+  }
+}
 
 class FlexibleImage extends StatefulWidget {
   const FlexibleImage({

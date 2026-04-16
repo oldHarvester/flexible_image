@@ -151,17 +151,35 @@ sealed class FlexibleImageSource with EquatableMixin {
     return FlexibleImageSource.fromSource(source);
   }
 
+  static FlexibleUnsupportedImageSource? _checkSupport({
+    required FileFormat fileFormat,
+    required String? source,
+  }) {
+    if (!fileFormat.isImage) {
+      return FlexibleUnsupportedImageSource(
+        fileFormat: fileFormat,
+        source: source,
+      );
+    }
+    return null;
+  }
+
+  factory FlexibleImageSource.fromBytes(Uint8List bytes) {
+    final fileFormat = bytes.fileFormat;
+    return _checkSupport(fileFormat: fileFormat, source: null) ??
+        (fileFormat.isVectorImage
+            ? FlexibleVectorMemoryImageSource(bytes: bytes)
+            : FlexibleBitmapMemoryImageSource(bytes: bytes));
+  }
+
   factory FlexibleImageSource.fromSource(String source) {
     final base64Bytes = source.tryBase64Decode;
 
     FlexibleUnsupportedImageSource? checkSupport(FileFormat fileFormat) {
-      if (!fileFormat.isImage) {
-        return FlexibleUnsupportedImageSource(
-          fileFormat: fileFormat,
-          source: source,
-        );
-      }
-      return null;
+      return _checkSupport(
+        fileFormat: fileFormat,
+        source: source,
+      );
     }
 
     final webUrl = !source.isWebUrl ? null : Uri.tryParse(source)?.cleanPath;
