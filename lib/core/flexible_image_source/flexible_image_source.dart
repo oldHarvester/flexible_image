@@ -5,7 +5,16 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart'
+    show
+        AssetBundle,
+        AssetImage,
+        ImageProvider,
+        MemoryImage,
+        BuildContext,
+        Size,
+        precacheImage;
+import 'package:flexible_image/core/flexible_image_source/file_image/file_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
