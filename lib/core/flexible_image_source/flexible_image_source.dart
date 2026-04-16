@@ -164,6 +164,7 @@ sealed class FlexibleImageSource with EquatableMixin {
       return null;
     }
 
+    final webUrl = !source.isWebUrl ? null : Uri.tryParse(source)?.cleanPath;
     if (base64Bytes != null) {
       final fileFormat = base64Bytes.fileFormat;
       return checkSupport(fileFormat) ??
@@ -172,8 +173,8 @@ sealed class FlexibleImageSource with EquatableMixin {
               : FlexibleBitmapMemoryImageSource(
                   bytes: base64Bytes,
                 ));
-    } else if (source.isWebUrl) {
-      final fileFormat = FileFormat.fromFilename(source);
+    } else if (webUrl != null) {
+      final fileFormat = FileFormat.fromFilename(webUrl);
       return checkSupport(fileFormat) ??
           (fileFormat.isVectorImage
               ? FlexibleVectorNetworkImageSource(
